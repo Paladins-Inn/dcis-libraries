@@ -36,7 +36,7 @@
   <name>de.paladins-inn.torganized-play:dcis-libraries</name>
 
   <description>
-    Torganized Play - Delphi Council Information System. These are some java classes and so on that may be useful in different SCSses.
+    Torganized Play - Delphi Council Information System. These are some java classes and so on that may be useful in different SCSes.
   </description>
 
 
@@ -54,8 +54,11 @@
   <properties>
     <kp-commons.version>4.0.12</kp-commons.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <slf4j.version>2.1.17</slf4j.version>
   </properties>
 
+  <inceptionYear>2025</inceptionYear>
 
   <scm>
     <url>https://github.com/Paladins-Inn/dcis-libraries</url>
@@ -121,7 +124,34 @@
             <arg>-Amapstruct.suppressGeneratorTimestamp=true</arg>
             <arg>-Amapstruct.defaultComponentModel=spring</arg>
           </compilerArgs>
+          <parameters>${maven.compiler.parameters}</parameters>
+          <release>${maven.compiler.release}</release>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
+          <encoding>${project.build.sourceEncoding}</encoding>
         </configuration>
+        <executions>
+          <execution>
+            <id>default-testCompile</id>
+            <goals>
+              <goal>testCompile</goal>
+            </goals>
+            <phase>test-compile</phase>
+            <configuration>
+              <skip>${skipTests}</skip>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
@@ -166,21 +196,6 @@
       </dependency>
 
 
-      <!-- REST -->
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>de.kaiserpfalz-edv.commons</groupId>
-        <artifactId>kp-commons-rest</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>de.kaiserpfalz-edv.commons</groupId>
-        <artifactId>kp-commons-spring</artifactId>
-      </dependency>
-
-
       <!-- Messaging -->
       <dependency>
         <groupId>com.google.guava</groupId>
@@ -191,10 +206,12 @@
       <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+        <version>4.2.1</version>
       </dependency>
       <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-stream-test-binder</artifactId>
+        <version>4.2.1</version>
         <scope>test</scope>
       </dependency>
 
@@ -212,29 +229,7 @@
         <version>1.1.4</version>
       </dependency>
 
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-core</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-annotations</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.datatype</groupId>
-        <artifactId>jackson-datatype-jsr310</artifactId>
-      </dependency>
 
-
-      <!-- input validation -->
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-validation</artifactId>
-      </dependency>
 
 
       <!-- Templating -->
@@ -299,6 +294,12 @@
         <artifactId>spring-boot-starter-cache</artifactId>
       </dependency>
 
+      <dependency>
+        <groupId>org.eclipse.parsson</groupId>
+        <artifactId>parsson</artifactId>
+        <version>1.1.7</version>
+      </dependency>
+
 
       <!-- Security -->
       <dependency>
@@ -310,35 +311,12 @@
         <artifactId>spring-boot-starter-oauth2-client</artifactId>
       </dependency>
 
-      <dependency>
-        <groupId>org.eclipse.parsson</groupId>
-        <artifactId>parsson</artifactId>
-        <version>1.1.7</version>
-      </dependency>
-
 
       <!-- Observability: Monitoring -->
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-actuator</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>io.micrometer</groupId>
-        <artifactId>micrometer-registry-prometheus</artifactId>
-        <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>io.micrometer</groupId>
-        <artifactId>micrometer-registry-otlp</artifactId>
-      </dependency>
       <dependency>
         <groupId>com.google.protobuf</groupId>
         <artifactId>protobuf-java</artifactId>
         <version>4.30.2</version>
-      </dependency>
-      <dependency>
-        <groupId>io.micrometer</groupId>
-        <artifactId>micrometer-tracing-bridge-brave</artifactId>
       </dependency>
       <dependency>
         <groupId>io.zipkin.contrib.otel</groupId>
@@ -357,11 +335,6 @@
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-core</artifactId>
         <version>1.5.18</version>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-ext</artifactId>
-        <version>2.0.17</version>
       </dependency>
       <dependency>
         <groupId>ch.qos.logback.contrib</groupId>
@@ -389,17 +362,23 @@
         <version>[1.26.0,)</version>
       </dependency>
 
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
+        <version>4.2.1</version>
+      </dependency>
+
       <!-- for spring-cloud-starter-contract-stub-runner -->
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-utils</artifactId>
-        <version>[3.5.1,)</version>
+        <version>[3.5.1,3.9999)</version>
         <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>com.jcraft</groupId>
         <artifactId>jsch</artifactId>
-        <version>[0.1.55,)</version>
+        <version>[0.1.55,0.9999)</version>
         <scope>test</scope>
       </dependency>
       <dependency>
@@ -418,10 +397,78 @@
     </dependency>
 
 
+    <!-- REST -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>de.kaiserpfalz-edv.commons</groupId>
+      <artifactId>kp-commons-rest</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>de.kaiserpfalz-edv.commons</groupId>
+      <artifactId>kp-commons-spring</artifactId>
+    </dependency>
+
+
     <!-- Messaging -->
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+    </dependency>
+
+
+    <!-- Data conversion -->
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.glassfish</groupId>
+      <artifactId>javax.json</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.parsson</groupId>
+      <artifactId>parsson</artifactId>
+    </dependency>
+
+
+    <!-- input validation -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+
+
+    <!-- Caching -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-cache</artifactId>
+      <version>3.4.4</version>
     </dependency>
 
 
@@ -445,6 +492,34 @@
     <dependency>
       <groupId>ch.qos.logback.contrib</groupId>
       <artifactId>logback-jackson</artifactId>
+    </dependency>
+
+
+    <!-- Observability: Monitoring -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-prometheus</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-otlp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-tracing-bridge-brave</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.zipkin.contrib.otel</groupId>
+      <artifactId>encoder-brave</artifactId>
     </dependency>
 
 
@@ -531,39 +606,6 @@
       <artifactId>spring-boot-devtools</artifactId>
       <scope>runtime</scope>
       <optional>true</optional>
-    </dependency>
-
-    <!-- JPA -->
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-
-    <!-- spring cloud messaging -->
-    <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-stream-test-binder</artifactId>
-      <version>4.2.1</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- for spring-cloud-starter-contract-stub-runner -->
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-utils</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.jcraft</groupId>
-      <artifactId>jsch</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>net.java.dev.jna</groupId>
-      <artifactId>jna-platform</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>
