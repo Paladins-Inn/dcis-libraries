@@ -1,0 +1,87 @@
+---
+spring:
+  application:
+    name: dcis-commons
+    admin:
+      enabled: false
+  main:
+    banner-mode: off
+    
+  cloud:
+    stream:
+      # noinspection SpringBootApplicationYaml
+      bindings:
+        input:
+          user-events:
+            destination: dcis.user.log
+            content-type: application/json
+            consumer:
+              use-native-decoding: false
+              auto-startup: true
+        output:
+          user-events:
+            destination: dcis.user.log
+            content-type: application/json
+            producer:
+              use-native-encoding: false
+              auto-startup: true
+
+  jackson:
+    serialization:
+      indent_output: true
+      write-null-map-values: false
+      fail-on-empty-beans: true
+      order-map-entries-by-keys: true
+      write-dates-with-zone-id: true
+      write-enums-using-to-string: true
+      write-empty-json-arrays: true
+      write-bigdecimal-as-plain: true
+      close-closeable: true
+  
+  datasource:
+    name: in-memory
+    url: &dburl jdbc:h2:file:./target/db;MODE=PostgreSQL
+    username: &dbusername sa
+    password: &dbpassword password
+    hikari:
+      connectionTimeout: 20000
+      maximumPoolSize: 5
+  
+  jpa:
+    showSql: false
+    hibernate:
+      ddlAuto: validate
+  
+  liquibase:
+    enabled: true
+    show-summary-output: log
+    show-summary: summary
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+    url: *dburl
+    user: *dbusername
+    password: *dbpassword
+
+
+management:
+  health:
+    binders:
+      enabled: false
+    rabbit:
+      enabled: false
+
+logging:
+  group:
+    rest: de.paladinsinn.tp.dcis.api,org.springframework.web,org.springframework.http
+  level:
+    web: WARN
+    security: WARN
+    rest: WARN
+    liquibase: INFO
+    de:
+      kaiserpfalzedv: INFO
+      paladinsinn: TRACE
+    org:
+      springframework:
+        web:
+          filter:
+            CommonsRequestLoggingFilter: INFO

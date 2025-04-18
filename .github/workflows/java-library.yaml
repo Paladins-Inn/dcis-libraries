@@ -1,0 +1,59 @@
+---
+name: Create Java Libary
+
+# Configures this workflow to run every time a change is pushed to the branch called `release`.
+on:
+  push:
+    branches:
+    - 'main'
+    paths-ignore:
+    - '.github/ISSUE_TEMPLATE/**'
+    - .github/workflows/docker-build.yaml
+    - .github/workflows/helm-push.yaml
+    - .github/dependabot.yml
+    - src/main/helm/**
+    - src/main/html/**
+    - CODE_OF_CONDUCT.md
+    - CONTRIBUTING.md
+    - 'KES Corporate Contributor License Agreement (2019-12-31).pdf'
+    - LICENSE
+    - README.md
+    - SECURITY.md
+    - Dockerfile
+  workflow_dispatch:
+
+# There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
+jobs:
+  publish-library:
+    runs-on: ubuntu-latest
+    # Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        id: setup-java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Set up Maven
+        id: setup-maven
+        uses: s4u/maven-settings-action@v3.0.0
+        with:
+          servers: |
+            [
+              { "id": "nvdApi", "username": "klenkes74", "password": "${{ secrets.NVD_API_KEY }}"}
+            ]
+
+      - name: Compile stuff
+        id: build-java
+        run: mvn deploy --batch-mode --no-transfer-progress
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
