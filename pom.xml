@@ -41,9 +41,9 @@
 
 
   <modules>
-    <module>dcis-libraries-commons</module>
-    <module>dcis-libraries-datatransfer</module>
-    <module>dcis-libraries-datastore</module>
+    <module>dcis-lib-parent</module>
+    <module>dcis-client-parent</module>
+    <module>dcis-store-parent</module>
   </modules>
 
 
@@ -138,16 +138,6 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
@@ -279,13 +269,6 @@
     </dependency>
 
 
-    <!-- Messaging -->
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-    </dependency>
-
-
     <!-- input validation -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -400,6 +383,11 @@
       <artifactId>spring-boot-testcontainers</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <scope>test</scope>
+    </dependency>
 
     <dependency>
       <groupId>org.testcontainers</groupId>
@@ -427,13 +415,6 @@
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-devtools</artifactId>
-      <scope>test</scope>
-      <optional>true</optional>
     </dependency>
   </dependencies>
 </project>
