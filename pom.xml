@@ -41,18 +41,14 @@
 
 
   <modules>
-    <module>dcis-lib-commons</module>
-    <module>dcis-lib-users</module>
-    <module>dcis-lib-arbitration</module>
-    <module>dcis-lib-operatives</module>
-    <module>dcis-lib-gaming</module>
-    <module>dcis-lib-threats</module>
-    <module>dcis-lib-codex</module>
+    <module>dcis-libraries-commons</module>
+    <module>dcis-libraries-datatransfer</module>
+    <module>dcis-libraries-datastore</module>
   </modules>
 
 
   <properties>
-    <kp-commons.version>4.0.12</kp-commons.version>
+    <kp-commons.version>4.0.13</kp-commons.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <slf4j.version>2.1.17</slf4j.version>
@@ -167,30 +163,9 @@
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-stream-dependencies</artifactId>
-        <version>4.2.1</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-function-dependencies</artifactId>
-        <version>4.2.2</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.cloud.fn</groupId>
-        <artifactId>spring-functions-catalog-bom</artifactId>
-        <version>5.1.0</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson</groupId>
-        <artifactId>jackson-bom</artifactId>
-        <version>2.18.3</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>3.4.4</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -201,18 +176,6 @@
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
         <version>33.4.6-jre</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
-        <version>4.2.1</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-stream-test-binder</artifactId>
-        <version>4.2.1</version>
-        <scope>test</scope>
       </dependency>
 
 
@@ -228,87 +191,10 @@
         <artifactId>javax.json</artifactId>
         <version>1.1.4</version>
       </dependency>
-
-
-
-
-      <!-- Templating -->
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-thymeleaf</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>nz.net.ultraq.thymeleaf</groupId>
-        <artifactId>thymeleaf-layout-dialect</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>org.thymeleaf.extras</groupId>
-        <artifactId>thymeleaf-extras-springsecurity6</artifactId>
-      </dependency>
-
-
-      <!-- Persistence -->
-      <dependency>
-        <groupId>de.kaiserpfalz-edv.commons</groupId>
-        <artifactId>kp-commons-jpa</artifactId>
-        <version>4.0.13</version>
-        <exclusions>
-          <exclusion>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jakarta-jsonp</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.data</groupId>
-        <artifactId>spring-data-envers</artifactId>
-        <version>3.4.4</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-jpa</artifactId>
-        <version>3.4.4</version>
-      </dependency>
-      <dependency>
-        <groupId>org.liquibase</groupId>
-        <artifactId>liquibase-core</artifactId>
-        <version>4.29.2</version>
-      </dependency>
-      <dependency>
-        <groupId>org.postgresql</groupId>
-        <artifactId>postgresql</artifactId>
-        <version>42.7.5</version>
-        <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>com.h2database</groupId>
-        <artifactId>h2</artifactId>
-        <version>2.3.232</version>
-        <scope>test</scope>
-      </dependency>
-
-
-      <!-- Caching -->
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-cache</artifactId>
-      </dependency>
-
       <dependency>
         <groupId>org.eclipse.parsson</groupId>
         <artifactId>parsson</artifactId>
         <version>1.1.7</version>
-      </dependency>
-
-
-      <!-- Security -->
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-security</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-oauth2-client</artifactId>
       </dependency>
 
 
@@ -367,48 +253,29 @@
         <artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
         <version>4.2.1</version>
       </dependency>
-
-      <!-- for spring-cloud-starter-contract-stub-runner -->
-      <dependency>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-utils</artifactId>
-        <version>[3.5.1,3.9999)</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>com.jcraft</groupId>
-        <artifactId>jsch</artifactId>
-        <version>[0.1.55,0.9999)</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>net.java.dev.jna</groupId>
-        <artifactId>jna-platform</artifactId>
-        <version>[5.15.0,)</version>
-        <scope>test</scope>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 
+
   <dependencies>
     <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-core</artifactId>
-    </dependency>
-
-
-    <!-- REST -->
-    <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
+      <artifactId>spring-boot-starter</artifactId>
     </dependency>
-    <dependency>
-      <groupId>de.kaiserpfalz-edv.commons</groupId>
-      <artifactId>kp-commons-rest</artifactId>
-    </dependency>
+
     <dependency>
       <groupId>de.kaiserpfalz-edv.commons</groupId>
       <artifactId>kp-commons-spring</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok-mapstruct-binding</artifactId>
+      <version>0.2.0</version>
     </dependency>
 
 
@@ -416,44 +283,6 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
-    </dependency>
-
-
-    <!-- Data conversion -->
-    <dependency>
-      <groupId>org.mapstruct</groupId>
-      <artifactId>mapstruct</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.glassfish</groupId>
-      <artifactId>javax.json</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.datatype</groupId>
-      <artifactId>jackson-datatype-jsr310</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.parsson</groupId>
-      <artifactId>parsson</artifactId>
     </dependency>
 
 
@@ -468,7 +297,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-cache</artifactId>
-      <version>3.4.4</version>
     </dependency>
 
 
@@ -604,7 +432,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
-      <scope>runtime</scope>
+      <scope>test</scope>
       <optional>true</optional>
     </dependency>
   </dependencies>
