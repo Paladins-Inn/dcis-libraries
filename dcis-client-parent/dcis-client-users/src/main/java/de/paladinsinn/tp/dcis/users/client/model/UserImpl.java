@@ -51,6 +51,9 @@ public class UserImpl implements User {
     private String nameSpace = "./.";
     private String name;
     
+    private String issuer;
+    private String subject;
+    
     @Override
     public UserImpl detain(@Min(1) @Max(1095) long days) {
         log.entry(days);

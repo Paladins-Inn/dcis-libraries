@@ -23,6 +23,7 @@ import com.google.common.eventbus.Subscribe;
 import de.paladinsinn.tp.dcis.lib.messaging.events.LoggingEventBus;
 import de.paladinsinn.tp.dcis.users.client.events.activity.UserLoginEvent;
 import de.paladinsinn.tp.dcis.users.client.events.activity.UserLogoutEvent;
+import de.paladinsinn.tp.dcis.users.client.authentication.UserLoggedInStateRepository;
 import io.micrometer.core.annotation.Timed;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;

@@ -18,18 +18,12 @@
 
 package de.paladinsinn.tp.dcis.users.client.model;
 
+import lombok.*;
+import lombok.extern.jackson.Jacksonized;
+
 import java.io.Serial;
 import java.time.OffsetDateTime;
 import java.util.UUID;
-
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import lombok.extern.jackson.Jacksonized;
 
 @Jacksonized
 @Builder(toBuilder = true)
@@ -47,7 +41,7 @@ public class UserLogEntryImpl implements UserLogEntry {
     private OffsetDateTime modified;
     private OffsetDateTime deleted;
     
-    private User user;
+    private UUID user;
 
     private String system;
     private String text;

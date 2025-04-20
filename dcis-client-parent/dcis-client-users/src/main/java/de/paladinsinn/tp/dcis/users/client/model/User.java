@@ -25,6 +25,9 @@ import de.kaiserpfalzedv.commons.api.resources.HasName;
 import de.kaiserpfalzedv.commons.api.resources.HasNameSpace;
 import de.kaiserpfalzedv.commons.api.resources.HasTimestamps;
 import de.paladinsinn.tp.dcis.users.client.model.state.*;
+import de.paladinsinn.tp.dcis.users.client.authentication.UserIsBannedException;
+import de.paladinsinn.tp.dcis.users.client.authentication.UserIsDeletedException;
+import de.paladinsinn.tp.dcis.users.client.authentication.UserIsDetainedException;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
@@ -37,6 +40,17 @@ import java.util.UUID;
  */
 @JsonDeserialize(as = UserImpl.class)
 public interface User extends HasId<UUID>, HasNameSpace, HasName, HasTimestamps {
+  /**
+   * @return The IDP issuer of this user.
+   */
+  String getIssuer();
+  
+  /**
+   * @return The IDP subject of this user.
+   */
+  String getSubject();
+  
+  
   /**
    * @return The period the user has been detained for.
    */
@@ -106,7 +120,7 @@ public interface User extends HasId<UUID>, HasNameSpace, HasName, HasTimestamps 
    * @return true if the user is deleted.
    */
   default boolean isDeleted() {
-    return getDeleted() != null;
+    return getDeleted() != null && !isBanned();
   }
   
   /**
@@ -136,5 +150,51 @@ public interface User extends HasId<UUID>, HasNameSpace, HasName, HasTimestamps 
     }
     
     return ActiveUser.builder().user(this).bus(bus).build();
+  }
+  
+  /**
+   * Checks if the user is inactive.
+
+   * @throws UserIsBannedException if the user is banned.
+   * @throws UserIsDeletedException if the user is deleted.
+   * @throws UserIsDetainedException if the user is detained.
+   */
+  default void checkInactive() throws UserIsBannedException, UserIsDeletedException, UserIsDetainedException {
+    checkBanned();
+    checkDeleted();
+    checkDetained();
+  }
+  
+  /**
+   * Checks if the user is banned.
+   *
+   * @throws UserIsBannedException if the user is banned
+   */
+  default void checkBanned() throws UserIsBannedException {
+    if (isBanned()) {
+      throw new UserIsBannedException(this);
+    }
+  }
+  
+  /**
+   * Checks if the user is deleted.
+   *
+   * @throws UserIsDeletedException if the user is deleted.
+   */
+  default void checkDeleted() throws UserIsDeletedException {
+    if (isDeleted() && !isBanned()) {
+      throw new UserIsDeletedException(this);
+    }
+  }
+  
+  /**
+   * Checks if the user is detained.
+   *
+   * @throws UserIsDetainedException if the user is detained.
+   */
+  default void checkDetained() throws UserIsDetainedException {
+    if (isDetained()) {
+      throw new UserIsDetainedException(this);
+    }
   }
 }

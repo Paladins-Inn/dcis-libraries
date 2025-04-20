@@ -25,6 +25,7 @@ import de.paladinsinn.tp.dcis.lib.ui.formatter.EnableKaiserpfalzCommonsSpringFor
 import de.paladinsinn.tp.dcis.users.client.model.UserToImplImpl;
 import de.paladinsinn.tp.dcis.users.client.model.User;
 import de.paladinsinn.tp.dcis.users.client.model.UserImpl;
+import de.paladinsinn.tp.dcis.users.client.authentication.UserLoggedInStateRepository;
 import lombok.extern.slf4j.XSlf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,7 +64,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Import({
     UserToImplImpl.class
 })
-@ComponentScan(basePackages = {"de.paladinsinn.tp.dcis.domain.users"})
+@ComponentScan(basePackages = {"de.paladinsinn.tp.dcis.users.client"})
 @XSlf4j
 public class UserLoggedinStateRepositoryTest {
   
@@ -161,7 +162,7 @@ public class UserLoggedinStateRepositoryTest {
   )
   @EnableTestBinder
   @EnableEventBus
-  @EnableUserManagement
+  @EnableUserClient
   @EnableKaiserpfalzCommonsSpringFormatters
   public static class Application {}
 }

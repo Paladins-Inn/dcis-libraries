@@ -222,7 +222,7 @@ public class UserService {
         
         Optional<User> data = loadUserByIdOrNamespaceAndName(user);
         data.ifPresent(u -> {
-            u.getState(fakeBus).ban();
+            u.getState(fakeBus).release();
             userRepository.save(toUserJPA.apply(u));
         });
         

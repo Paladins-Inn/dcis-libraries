@@ -16,27 +16,30 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.paladinsinn.tp.dcis.users.client.ui;
+package de.paladinsinn.tp.dcis.users.client.authentication;
 
 
 import com.google.common.eventbus.EventBus;
 import de.paladinsinn.tp.dcis.users.client.events.activity.UserLoginEvent;
 import de.paladinsinn.tp.dcis.users.client.model.User;
-import de.paladinsinn.tp.dcis.users.client.model.UserImpl;
+import de.paladinsinn.tp.dcis.users.client.services.UserCantBeCreatedException;
+import de.paladinsinn.tp.dcis.users.client.services.UserClient;
 import io.micrometer.core.annotation.Timed;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.XSlf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 import java.io.Closeable;
-import java.util.UUID;
+import java.util.Optional;
+
+import static org.slf4j.ext.XLogger.Level.ERROR;
 
 
 /**
@@ -46,9 +49,13 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor(onConstructor_ = @__(@Inject))
 @XSlf4j
-public class UserLoginReportingFilter implements ApplicationListener<AuthenticationSuccessEvent>, Closeable {
+public class UserAuthenticationFilter implements ApplicationListener<AuthenticationSuccessEvent>, Closeable {
 
     private final EventBus loggingEventBus;
+    private final UserClient userClient;
+    
+    @Value("${spring.application.system:unknown")
+    private String system;
     
     @PostConstruct
     public void init() {
@@ -69,33 +76,40 @@ public class UserLoginReportingFilter implements ApplicationListener<Authenticat
     @Override
     public void onApplicationEvent(@Nonnull AuthenticationSuccessEvent event) {
         log.entry(event);
-        
-        loggingEventBus.post(createEvent(event));
+
+        try {
+            Optional<User> user = userClient.login(event.getAuthentication());
+            
+            if (user.isEmpty()) {
+                user = userClient.create(event.getAuthentication());
+            }
+            
+            createEvent(user).ifPresentOrElse(
+                loggingEventBus::post,
+                () -> log.warn("User can't be logged in. event={}", event)
+            );
+
+        } catch (UserIsBannedException | UserIsDeletedException | UserIsDetainedException | UserCantBeCreatedException e) {
+            throw log.throwing(ERROR, new IllegalStateException(e));
+        }
         
         log.exit();
     }
+
     
-    private UserLoginEvent createEvent(final AuthenticationSuccessEvent event) {
-        log.entry(event);
+    private Optional<UserLoginEvent> createEvent(final Optional<User> user)
+        throws UserIsBannedException, UserIsDeletedException, UserIsDetainedException, UserCantBeCreatedException {
+        log.entry(user.orElse(null));
+
+        if (user.isEmpty()) {
+            return Optional.empty();
+        }
         
-        DefaultOidcUser user = (DefaultOidcUser) event.getAuthentication().getPrincipal();
-        
-        return log.exit(
+        return log.exit(Optional.of(
             UserLoginEvent.builder()
-                .user(readUserFromOAuth2Token(user))
+                .user(user.get())
+                .system(system)
             .build()
-        );
-    }
-    
-    private User readUserFromOAuth2Token(final DefaultOidcUser user) {
-        log.entry(user);
-        
-        return log.exit(
-            UserImpl.builder()
-                .id(UUID.fromString(user.getSubject()))
-                .name(user.getName())
-                .nameSpace(user.getIssuer().toString())
-                .build()
-        );
+        ));
     }
 }

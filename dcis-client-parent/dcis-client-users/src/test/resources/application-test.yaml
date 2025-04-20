@@ -1,6 +1,8 @@
 ---
 spring:
   application:
+    # noinspection SpringBootApplicationYaml
+    system: DCIS
     name: dcis-commons
     admin:
       enabled: false

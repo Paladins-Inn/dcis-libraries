@@ -27,9 +27,9 @@ import de.paladinsinn.tp.dcis.users.client.events.activity.UserLogoutEvent;
 import de.paladinsinn.tp.dcis.users.client.model.User;
 import de.paladinsinn.tp.dcis.users.client.model.UserImpl;
 import de.paladinsinn.tp.dcis.users.client.model.UserToImplImpl;
-import de.paladinsinn.tp.dcis.users.client.services.EnableUserManagement;
+import de.paladinsinn.tp.dcis.users.client.services.EnableUserClient;
 import de.paladinsinn.tp.dcis.users.client.services.UserLogEntryClient;
-import de.paladinsinn.tp.dcis.users.client.services.UserLoggedInStateRepository;
+import de.paladinsinn.tp.dcis.users.client.authentication.UserLoggedInStateRepository;
 import lombok.extern.slf4j.XSlf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +77,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @EnableJpaRepositories(basePackages = {"de.paladinsinn.tp.dcis.users"})
 @EntityScan(basePackages = {"de.paladinsinn.tp.dcis.users"})
 @EnableEventBus
-@EnableUserManagement
+@EnableUserClient
 @Import({
     UserToImplImpl.class,
     UserToJpaImpl.class

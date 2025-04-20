@@ -17,7 +17,10 @@
  */
 package de.paladinsinn.tp.dcis.users.store;
 
-import org.springframework.context.annotation.Import;
+import de.paladinsinn.tp.dcis.users.client.services.EnableUserClient;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.lang.annotation.*;
 
@@ -32,8 +35,8 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-@Import({
-        UserRepository.class,
-        UserJPA.class
- })
-public @interface EnableLocalUserDatabase {}
+@EnableUserClient
+@EnableJpaRepositories(basePackages = "de.paladinsinn.tp.dcis.users.store")
+@EntityScan(basePackages = "de.paladinsinn.tp.dcis.users.store")
+@ComponentScan(basePackages = "de.paladinsinn.tp.dcis.users.store")
+public @interface EnableUserStore {}

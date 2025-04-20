@@ -17,8 +17,7 @@
  */
 package de.paladinsinn.tp.dcis.users.client.services;
 
-import de.paladinsinn.tp.dcis.lib.messaging.events.LoggingEventBus;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.lang.annotation.*;
 
@@ -33,10 +32,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-@Import({
-        UserLogEntryClient.class,
-        UserLogEntrySender.class,
-        UserLoggedInStateRepository.class,
-        LoggingEventBus.class
- })
-public @interface EnableUserManagement {}
+@ComponentScan(basePackages = "de.paladinsinn.tp.dcis.users.client")
+public @interface EnableUserClient {}

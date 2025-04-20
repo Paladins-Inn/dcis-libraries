@@ -15,7 +15,7 @@
  * License along with this program.
  * If not, see <https://www.gnu.org/licenses/>.
  */
-package de.paladinsinn.tp.dcis.users.client.services;
+package de.paladinsinn.tp.dcis.users.client.authentication;
 
 import de.paladinsinn.tp.dcis.users.client.model.User;
 import io.micrometer.core.annotation.Timed;

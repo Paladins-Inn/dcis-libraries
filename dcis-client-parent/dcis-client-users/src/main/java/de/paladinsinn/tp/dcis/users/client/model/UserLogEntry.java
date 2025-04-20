@@ -27,7 +27,7 @@ import java.util.UUID;
 
 @JsonDeserialize(as = UserLogEntryImpl.class)
 public interface UserLogEntry extends HasId<UUID>, HasTimestamps, Serializable {
-    User getUser();
+    UUID getUser();
 
     String getSystem();
     String getText();
@@ -38,14 +38,7 @@ public interface UserLogEntry extends HasId<UUID>, HasTimestamps, Serializable {
         return new Object[] {
             getCreated(),
             getSystem(),
-            getUser().getId(),
-            getUser().getNameSpace(),
-            getUser().getName(),
-            getUser().getCreated(),
-            getUser().getModified(),
-            getUser().getDeleted(),
-            getUser().getDetainedTill(),
-            getUser().getDetainmentDuration()
+            getUser()
         };
     }
 }
