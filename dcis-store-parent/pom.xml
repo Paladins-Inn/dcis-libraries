@@ -35,11 +35,6 @@
 
   <modules>
     <module>dcis-store-users</module>
-    <module>dcis-store-arbitration</module>
-    <module>dcis-store-operatives</module>
-    <module>dcis-store-gaming</module>
-    <module>dcis-store-threats</module>
-    <module>dcis-store-codex</module>
   </modules>
 
   <inceptionYear>2025</inceptionYear>

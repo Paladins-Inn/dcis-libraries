@@ -35,11 +35,6 @@
 
   <modules>
     <module>dcis-client-users</module>
-    <module>dcis-client-arbitration</module>
-    <module>dcis-client-operatives</module>
-    <module>dcis-client-gaming</module>
-    <module>dcis-client-threats</module>
-    <module>dcis-client-codex</module>
   </modules>
 
 
