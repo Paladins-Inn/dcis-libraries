@@ -21,6 +21,8 @@ package de.paladinsinn.tp.dcis.users.store;
 import de.paladinsinn.tp.dcis.lib.messaging.events.FakeEventBus;
 import de.paladinsinn.tp.dcis.users.client.model.User;
 import de.paladinsinn.tp.dcis.users.client.model.UserToImpl;
+import de.paladinsinn.tp.dcis.users.client.services.UserStoreReader;
+import de.paladinsinn.tp.dcis.users.client.services.UserStoreWriter;
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
 import lombok.Getter;
@@ -28,13 +30,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.XSlf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -43,7 +41,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @ToString(callSuper = true, onlyExplicitlyIncluded = true)
 @XSlf4j
-public class UserService {
+public class UserService implements UserStoreReader, UserStoreWriter {
     private final UserRepository userRepository;
     
     private final FakeEventBus fakeBus;
@@ -143,20 +141,6 @@ public class UserService {
     
     @Counted
     @Timed
-    public Page<User> retrieveUsers(final String nameSpace, final Pageable pageable) {
-        log.entry(nameSpace, pageable, authentication);
-
-        Page<UserJPA> data = userRepository.findByNameSpace(nameSpace, pageable);
-        Page<User> result = new PageImpl<>(new LinkedList<>(data.stream().map(toUser).toList()), pageable, data.getTotalElements());
-
-        log.debug("Loaded users for namespace. nameSpace='{}', page={}/{}, size={}", nameSpace, 
-                result.getPageable().getPageNumber(), result.getTotalPages(), result.getTotalElements());
-
-        return log.exit(result);
-    }
-    
-    @Counted
-    @Timed
     public User updateUser(final UUID uid, final User user) {
         log.entry(uid, user, authentication);
         
@@ -227,5 +211,38 @@ public class UserService {
         });
         
         log.exit(data);
+    }
+    
+    @Override
+    public Optional<User> findById(final UUID id) {
+        log.entry(id);
+        
+        return log.exit(Optional.ofNullable(userRepository.findById(id).orElse(null)));
+    }
+    
+    @Override
+    public Optional<User> findByUsername(final String namespace, final String name) {
+        log.entry(namespace, name);
+        
+        return log.exit(Optional.ofNullable(userRepository.findByNameSpaceAndName(namespace, name).orElse(null)));
+    }
+    
+    @Override
+    public Optional<User> findByLogin(final String issuer, final String subject) {
+        log.entry(issuer, subject);
+        
+        return log.exit(Optional.ofNullable(userRepository.findByIssuerAndSubject(issuer, subject).orElse(null)));
+    }
+    
+    @Override
+    public User write(final User user) {
+        log.entry(user);
+        
+        return log.exit(updateUser(user.getId(), user));
+    }
+    
+    @Override
+    public void delete(final UUID id) {
+        log.error("Deleting user not implemented yet. user={}", id);
     }
 }

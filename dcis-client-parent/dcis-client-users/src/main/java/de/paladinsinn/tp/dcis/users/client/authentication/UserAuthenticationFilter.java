@@ -49,7 +49,7 @@ import static org.slf4j.ext.XLogger.Level.ERROR;
 @Service
 @RequiredArgsConstructor(onConstructor_ = @__(@Inject))
 @XSlf4j
-public class UserAuthenticationFilter implements ApplicationListener<AuthenticationSuccessEvent>, Closeable {
+public class UserAuthenticationFilter implements ApplicationListener<AuthenticationSuccessEvent>, Closeable, AutoCloseable {
 
     private final EventBus loggingEventBus;
     private final UserClient userClient;
@@ -84,10 +84,7 @@ public class UserAuthenticationFilter implements ApplicationListener<Authenticat
                 user = userClient.create(event.getAuthentication());
             }
             
-            createEvent(user).ifPresentOrElse(
-                loggingEventBus::post,
-                () -> log.warn("User can't be logged in. event={}", event)
-            );
+            createEvent(user).ifPresent(loggingEventBus::post);
 
         } catch (UserIsBannedException | UserIsDeletedException | UserIsDetainedException | UserCantBeCreatedException e) {
             throw log.throwing(ERROR, new IllegalStateException(e));
@@ -101,13 +98,9 @@ public class UserAuthenticationFilter implements ApplicationListener<Authenticat
         throws UserIsBannedException, UserIsDeletedException, UserIsDetainedException, UserCantBeCreatedException {
         log.entry(user.orElse(null));
 
-        if (user.isEmpty()) {
-            return Optional.empty();
-        }
-        
         return log.exit(Optional.of(
             UserLoginEvent.builder()
-                .user(user.get())
+                .user(user.orElse(null))
                 .system(system)
             .build()
         ));

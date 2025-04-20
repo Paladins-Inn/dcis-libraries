@@ -70,6 +70,16 @@ public class UserJPA extends AbstractRevisionedJPAEntity<UUID> implements User {
     @Builder.Default
     private boolean banned = false;
     
+    @NotNull
+    @NotBlank
+    @Column(name = "ISSUER", nullable = false)
+    private String issuer;
+    
+    @NotNull
+    @NotBlank
+    @Column(name = "SUBJECT", nullable = false)
+    private String subject;
+    
     /** The namespace this player is registered for. */
     @NotNull
     @Column(name = "NAMESPACE", columnDefinition = "VARCHAR(100)", nullable = false, updatable = false)

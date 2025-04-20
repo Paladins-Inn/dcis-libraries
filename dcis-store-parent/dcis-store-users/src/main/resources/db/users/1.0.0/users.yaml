@@ -74,6 +74,18 @@ databaseChangeLog:
             name: DETAINED_DURATION
             type: NUMERIC(21,0)
         - column:
+            name: ISSUER
+            type: VARCHAR(100)
+            constraints:
+              nullable: false
+              notNullConstraintName: USERS_ISSUER_NN
+        - column:
+            name: SUBJECT
+            type: VARCHAR(100)
+            constraints:
+              nullable: false
+              notNullConstraintName: USERS_SUBJECT_NN
+        - column:
             name: NAME
             type: VARCHAR(100)
             constraints:
@@ -90,3 +102,7 @@ databaseChangeLog:
         constraintName: USERS_NAME_UK
         tableName: USERS
         columnNames: 'NAMESPACE,NAME'
+    - addUniqueConstraint:
+        constraintName: USERS_LOGIN_UK
+        tableName: USERS
+        columnNames: 'ISSUER,SUBJECT'

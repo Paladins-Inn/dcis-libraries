@@ -1,8 +1,6 @@
 package de.paladinsinn.tp.dcis.users.client.authentication;
 
 import de.paladinsinn.tp.dcis.users.client.model.User;
-import jakarta.annotation.Nullable;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.ToString;
@@ -19,22 +17,6 @@ import java.time.OffsetDateTime;
 public class UserIsBannedException extends UserIsInactiveException {
   public UserIsBannedException(@NotNull User user) {
     super(user, "User is banned since " + user.getDeleted());
-  }
-  
-  public UserIsBannedException(@Nullable final User user, @NotBlank final String message) {
-    super(user, message);
-  }
-  
-  public UserIsBannedException(@Nullable final User user, @NotBlank final String message, @NotNull final Throwable cause) {
-    super(user, message, cause);
-  }
-  
-  public UserIsBannedException(@Nullable final User user, @NotNull final Throwable cause) {
-    super(user, cause);
-  }
-  
-  public UserIsBannedException(@Nullable final User user, @NotBlank final String message, @NotNull final Throwable cause, final boolean enableSuppression, final boolean writableStackTrace) {
-    super(user, message, cause, enableSuppression, writableStackTrace);
   }
   
   public OffsetDateTime getBannedAt() {

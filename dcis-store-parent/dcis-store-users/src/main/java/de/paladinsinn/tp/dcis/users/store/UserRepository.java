@@ -17,14 +17,12 @@
  */
 package de.paladinsinn.tp.dcis.users.store;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 /**
  * 
@@ -35,10 +33,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<UserJPA, UUID> {
     Optional<UserJPA> findByNameSpaceAndName(String nameSpace, String name);
-
-    List<UserJPA> findByName(String name);
-    Page<UserJPA> findByName(String name, Pageable pageable);
+    Optional<UserJPA> findByIssuerAndSubject(String issuer, String subject);
 
     List<UserJPA> findByNameSpace(String nameSpace);
-    Page<UserJPA> findByNameSpace(String nameSpace, Pageable pageable);
 }

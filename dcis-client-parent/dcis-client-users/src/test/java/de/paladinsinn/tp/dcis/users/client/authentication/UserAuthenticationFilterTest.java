@@ -80,6 +80,30 @@ public class UserAuthenticationFilterTest {
   
   
   @Test
+  public void shouldRegisterOnBusWhenInitialized() {
+    log.entry();
+    
+    sut.init();
+    
+    verify(bus, times(1)).register(sut);
+    
+    log.exit();
+  }
+  
+  
+  @Test
+  public void shouldUnregisterFromBusWhenClosed() {
+    log.entry();
+    
+    sut.close();
+    
+    verify(bus, times(1)).unregister(sut);
+    
+    log.exit();
+  }
+  
+  
+  @Test
   public void shouldAuthenticateWhenUserIsIsActive() throws BaseUserException {
     log.entry();
     
