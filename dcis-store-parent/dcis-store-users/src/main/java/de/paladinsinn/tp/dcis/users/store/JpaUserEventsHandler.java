@@ -31,10 +31,11 @@ import de.paladinsinn.tp.dcis.users.client.events.state.UserActivatedEvent;
 import de.paladinsinn.tp.dcis.users.client.events.state.UserCreatedEvent;
 import de.paladinsinn.tp.dcis.users.client.events.state.UserDeletedEvent;
 import de.paladinsinn.tp.dcis.users.client.events.state.UserRemovedEvent;
+import de.paladinsinn.tp.dcis.users.client.model.User;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.inject.Inject;
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.XSlf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -84,9 +85,9 @@ public class JpaUserEventsHandler implements UserEventsHandler {
   public void event(final UserCreatedEvent event) {
     log.entry(event);
     
-    userService.createUser(event.getUser());
+    User result = userService.createUser(event.getUser());
     
-    log.exit();
+    log.exit(result);
   }
   
   @Override
