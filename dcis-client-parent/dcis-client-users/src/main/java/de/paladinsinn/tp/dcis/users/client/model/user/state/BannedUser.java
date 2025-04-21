@@ -16,16 +16,15 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.paladinsinn.tp.dcis.users.client.model.state;
+package de.paladinsinn.tp.dcis.users.client.model.user.state;
 
 
 import com.google.common.eventbus.EventBus;
-import de.paladinsinn.tp.dcis.users.client.events.arbitation.UserBannedEvent;
 import de.paladinsinn.tp.dcis.users.client.events.arbitation.UserPetitionedEvent;
 import de.paladinsinn.tp.dcis.users.client.events.arbitation.UserReleasedEvent;
 import de.paladinsinn.tp.dcis.users.client.events.state.UserDeletedEvent;
 import de.paladinsinn.tp.dcis.users.client.events.state.UserRemovedEvent;
-import de.paladinsinn.tp.dcis.users.client.model.User;
+import de.paladinsinn.tp.dcis.users.client.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,7 +42,7 @@ import java.util.UUID;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @ToString(of = {"user"})
-public class DetainedUser implements UserState {
+public class BannedUser implements UserState {
   @Getter
   final private User user;
   final private EventBus bus;
@@ -66,7 +65,7 @@ public class DetainedUser implements UserState {
     if (user.isDeleted()) {
       return DeletedUser.builder().user(user).bus(bus).build();
     }
-
+    
     bus.post(UserReleasedEvent.builder().user(user).build());
     
     return ActiveUser.builder().user(user).bus(bus).build();
@@ -74,11 +73,7 @@ public class DetainedUser implements UserState {
   
   @Override
   public UserState ban() {
-    user.ban();
-    
-    bus.post(UserBannedEvent.builder().user(user).build());
-    
-    return BannedUser.builder().user(user).bus(bus).build();
+    return this;
   }
   
   @Override
@@ -103,7 +98,7 @@ public class DetainedUser implements UserState {
   @Override
   public UserState petition(final UUID petition) {
     bus.post(UserPetitionedEvent.builder().user(user).petition(petition).build());
-    
+
     return this;
   }
 }

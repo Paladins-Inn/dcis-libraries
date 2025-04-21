@@ -16,20 +16,29 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.paladinsinn.tp.dcis.users.store;
+package de.paladinsinn.tp.dcis.users.client.model.user;
 
-import de.paladinsinn.tp.dcis.users.client.model.user.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import de.kaiserpfalzedv.commons.api.resources.HasId;
+import de.kaiserpfalzedv.commons.api.resources.HasTimestamps;
 
-import java.util.function.Function;
+import java.io.Serializable;
+import java.util.UUID;
 
-@Mapper
-public interface UserToJpa extends Function<User, UserJPA> {
-    @Mapping(target = "version", ignore = true)
-    @Mapping(target = "revId", ignore = true)
-    @Mapping(target = "revisioned", ignore = true)
-    @Mapping(target = "modified", ignore = true)
-    @Mapping(target = "deleted", ignore = true)
-    UserJPA apply(User orig);
+@JsonDeserialize(as = UserLogEntryImpl.class)
+public interface UserLogEntry extends HasId<UUID>, HasTimestamps, Serializable {
+    UUID getUser();
+
+    String getSystem();
+    String getText();
+    
+    String getComment();
+    
+    default Object[] getI18nData() {
+        return new Object[] {
+            getCreated(),
+            getSystem(),
+            getUser()
+        };
+    }
 }

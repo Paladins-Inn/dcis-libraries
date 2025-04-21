@@ -19,12 +19,16 @@
 package de.paladinsinn.tp.dcis.users.store;
 
 import de.paladinsinn.tp.dcis.lib.messaging.events.FakeEventBus;
-import de.paladinsinn.tp.dcis.users.client.model.User;
-import de.paladinsinn.tp.dcis.users.client.model.UserToImpl;
+import de.paladinsinn.tp.dcis.users.client.model.apikey.ApiKey;
+import de.paladinsinn.tp.dcis.users.client.model.apikey.ApiKeyToImpl;
+import de.paladinsinn.tp.dcis.users.client.model.user.User;
+import de.paladinsinn.tp.dcis.users.client.model.user.UserToImpl;
 import de.paladinsinn.tp.dcis.users.client.services.UserStoreReader;
 import de.paladinsinn.tp.dcis.users.client.services.UserStoreWriter;
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -42,11 +46,15 @@ import java.util.UUID;
 @ToString(callSuper = true, onlyExplicitlyIncluded = true)
 @XSlf4j
 public class UserService implements UserStoreReader, UserStoreWriter {
-    private final UserRepository userRepository;
-    
-    private final FakeEventBus fakeBus;
+    private final UserRepository users;
     private final UserToImpl toUser;
     private final UserToJpa toUserJPA;
+
+    private final ApiKeyRepository apiKeys;
+    private final ApiKeyToImpl toApiKey;
+    private final ApiKeyToJPA toApiKeyJPA;
+    
+    private final FakeEventBus fakeBus;
 
     @Getter
     @Setter
@@ -58,7 +66,7 @@ public class UserService implements UserStoreReader, UserStoreWriter {
     public User createUser(final User player) {
         log.entry(player, authentication);
 
-        UserJPA result = userRepository.save(toUserJPA.apply(player));
+        UserJPA result = users.save(toUserJPA.apply(player));
         
         return log.exit(result);
     }
@@ -71,7 +79,7 @@ public class UserService implements UserStoreReader, UserStoreWriter {
         Optional<User> data = loadUserByIdOrNamespaceAndName(user);
         data.ifPresent(u -> {
             u.getState(fakeBus).activate();
-            userRepository.save(toUserJPA.apply(u));
+            users.save(toUserJPA.apply(u));
         });
         
         log.exit();
@@ -98,7 +106,7 @@ public class UserService implements UserStoreReader, UserStoreWriter {
     public Optional<User> retrieveUser(final UUID uid) {
         log.entry(uid, authentication);
 
-        Optional<UserJPA> result = userRepository.findById(uid);
+        Optional<UserJPA> result = users.findById(uid);
 
         log.debug("Loaded player from database. uid={}, player={}", uid, result.isPresent() ? result.get() : "***none***");
 
@@ -110,7 +118,7 @@ public class UserService implements UserStoreReader, UserStoreWriter {
     public Optional<User> retrieveUser(final String nameSpace, final String name) {
         log.entry(nameSpace, name, authentication);
         
-        Optional<UserJPA> result = userRepository.findByNameSpaceAndName(nameSpace, name);
+        Optional<UserJPA> result = users.findByNameSpaceAndName(nameSpace, name);
         
         log.debug("Loaded player from database. nameSpace={}, name={}, player={}", nameSpace, name, result.isPresent() ? result.get() : "***none***");
         
@@ -122,7 +130,7 @@ public class UserService implements UserStoreReader, UserStoreWriter {
     public List<User> retrieveUsers() {
         log.entry();
         
-        List<UserJPA> data = userRepository.findAll();
+        List<UserJPA> data = users.findAll();
         List<User> result = data.stream().map(e -> (User) toUser.apply(e)).toList();
         
         return log.exit(result);
@@ -133,7 +141,7 @@ public class UserService implements UserStoreReader, UserStoreWriter {
     public List<User> retrieveUsers(final String namespace) {
         log.entry(namespace);
         
-        List<UserJPA> data = userRepository.findByNameSpace(namespace);
+        List<UserJPA> data = users.findByNameSpace(namespace);
         List<User> result = data.stream().map(e -> (User) toUser.apply(e)).toList();
         
         return log.exit(result);
@@ -179,7 +187,7 @@ public class UserService implements UserStoreReader, UserStoreWriter {
         Optional<User> data = loadUserByIdOrNamespaceAndName(user);
         data.ifPresent(u -> {
             u.getState(fakeBus).detain(ttl);
-            userRepository.save(toUserJPA.apply(u));
+            users.save(toUserJPA.apply(u));
         });
         
         log.exit(data);
@@ -193,7 +201,7 @@ public class UserService implements UserStoreReader, UserStoreWriter {
         Optional<User> data = loadUserByIdOrNamespaceAndName(user);
         data.ifPresent(u -> {
             u.getState(fakeBus).ban();
-            userRepository.save(toUserJPA.apply(u));
+            users.save(toUserJPA.apply(u));
         });
         
         log.exit(data);
@@ -207,31 +215,66 @@ public class UserService implements UserStoreReader, UserStoreWriter {
         Optional<User> data = loadUserByIdOrNamespaceAndName(user);
         data.ifPresent(u -> {
             u.getState(fakeBus).release();
-            userRepository.save(toUserJPA.apply(u));
+            users.save(toUserJPA.apply(u));
         });
         
         log.exit(data);
     }
     
+    
+    @Counted
+    @Timed
+    public void saveApiKey(@NotNull @Valid User user, @NotNull @Valid final ApiKey apiKey) {
+        log.entry(user, apiKey, authentication);
+        
+        ApiKeyJPA data = toApiKeyJPA.apply(apiKey);
+        
+        apiKeys.save(data);
+        
+        log.exit(data);
+    }
+    
+    
+    @Counted
+    @Timed
+    public void revokeApiKey(@NotNull @Valid User user, @NotNull @Valid final ApiKey apiKey) {
+        log.entry(user, apiKey, authentication);
+        
+        apiKeys.deleteById(apiKey.getId());
+        
+        log.exit();
+    }
+    
+    @Counted
+    @Timed
+    public Optional<ApiKey> readApiKey(@NotNull final UUID apiKey) {
+        log.entry(apiKey, authentication);
+        
+        Optional<ApiKeyJPA> data = apiKeys.findById(apiKey);
+        
+        return log.exit(Optional.ofNullable(toApiKey.apply(data.orElse(null))));
+    }
+    
+    
     @Override
     public Optional<User> findById(final UUID id) {
         log.entry(id);
         
-        return log.exit(Optional.ofNullable(userRepository.findById(id).orElse(null)));
+        return log.exit(Optional.ofNullable(users.findById(id).orElse(null)));
     }
     
     @Override
     public Optional<User> findByUsername(final String namespace, final String name) {
         log.entry(namespace, name);
         
-        return log.exit(Optional.ofNullable(userRepository.findByNameSpaceAndName(namespace, name).orElse(null)));
+        return log.exit(Optional.ofNullable(users.findByNameSpaceAndName(namespace, name).orElse(null)));
     }
     
     @Override
     public Optional<User> findByLogin(final String issuer, final String subject) {
         log.entry(issuer, subject);
         
-        return log.exit(Optional.ofNullable(userRepository.findByIssuerAndSubject(issuer, subject).orElse(null)));
+        return log.exit(Optional.ofNullable(users.findByIssuerAndSubject(issuer, subject).orElse(null)));
     }
     
     @Override

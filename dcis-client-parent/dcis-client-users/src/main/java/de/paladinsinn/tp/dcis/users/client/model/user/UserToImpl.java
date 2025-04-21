@@ -16,20 +16,13 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.paladinsinn.tp.dcis.users.store;
+package de.paladinsinn.tp.dcis.users.client.model.user;
 
-import de.paladinsinn.tp.dcis.users.client.model.user.User;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.function.Function;
 
 @Mapper
-public interface UserToJpa extends Function<User, UserJPA> {
-    @Mapping(target = "version", ignore = true)
-    @Mapping(target = "revId", ignore = true)
-    @Mapping(target = "revisioned", ignore = true)
-    @Mapping(target = "modified", ignore = true)
-    @Mapping(target = "deleted", ignore = true)
-    UserJPA apply(User orig);
+public interface UserToImpl extends Function<User, UserImpl> {
+    UserImpl apply(User orig);
 }

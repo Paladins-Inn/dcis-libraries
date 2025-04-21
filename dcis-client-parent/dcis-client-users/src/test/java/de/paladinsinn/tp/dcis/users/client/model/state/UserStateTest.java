@@ -19,7 +19,9 @@ package de.paladinsinn.tp.dcis.users.client.model.state;
 
 import com.google.common.eventbus.EventBus;
 import de.paladinsinn.tp.dcis.users.client.events.arbitation.UserPetitionedEvent;
-import de.paladinsinn.tp.dcis.users.client.model.User;
+import de.paladinsinn.tp.dcis.users.client.model.user.User;
+import de.paladinsinn.tp.dcis.users.client.model.user.state.ActiveUser;
+import de.paladinsinn.tp.dcis.users.client.model.user.state.UserState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. Kaiserpfalz EDV-Service, Roland T. Lichti
+ * Copyright (c) 2024-2025. Kaiserpfalz EDV-Service, Roland T. Lichti
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -16,12 +16,16 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.paladinsinn.tp.dcis.users.client.model;
+package de.paladinsinn.tp.dcis.users.client.model.apikey;
 
+import de.paladinsinn.tp.dcis.users.client.model.user.UserImpl;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.extern.jackson.Jacksonized;
+import lombok.extern.slf4j.XSlf4j;
 
-import java.io.Serial;
+import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -30,20 +34,30 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
-@ToString
+@ToString(of = {"id", "nameSpace", "created", "expiration"})
 @EqualsAndHashCode(of = {"id"})
-public class UserLogEntryImpl implements UserLogEntry {
-    @Serial
-    private static final long serialVersionUID = 1L;
-    
-    private UUID id;
-    private OffsetDateTime created;
+@XSlf4j
+public class ApiKeyImpl implements ApiKey {
+    @Builder.Default
+    private UUID id = UUID.randomUUID();
+    @Builder.Default
+    private OffsetDateTime created = OffsetDateTime.now(Clock.systemUTC());
     private OffsetDateTime modified;
     private OffsetDateTime deleted;
-    
-    private UUID user;
 
-    private String system;
-    private String text;
-    private String comment;
+    @Builder.Default
+    private String nameSpace = "./.";
+
+    public String getName() {
+        return id.toString();
+    }
+    
+    /**
+     * The expiration time of this API key. Defaults to 1 year from now.
+     */
+    @Builder.Default
+    private OffsetDateTime expiration = OffsetDateTime.now(Clock.systemUTC()).plusMonths(12);
+    
+    @NotNull @Valid
+    private UserImpl user;
 }

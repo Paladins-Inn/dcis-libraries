@@ -1,6 +1,6 @@
 package de.paladinsinn.tp.dcis.users.client.authentication;
 
-import de.paladinsinn.tp.dcis.users.client.model.User;
+import de.paladinsinn.tp.dcis.users.client.model.user.User;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.ToString;

@@ -22,14 +22,15 @@ package de.paladinsinn.tp.dcis.users.store;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.eventbus.EventBus;
 import de.paladinsinn.tp.dcis.lib.messaging.events.EnableEventBus;
+import de.paladinsinn.tp.dcis.users.client.authentication.UserLoggedInStateRepository;
 import de.paladinsinn.tp.dcis.users.client.events.activity.UserLoginEvent;
 import de.paladinsinn.tp.dcis.users.client.events.activity.UserLogoutEvent;
-import de.paladinsinn.tp.dcis.users.client.model.User;
-import de.paladinsinn.tp.dcis.users.client.model.UserImpl;
-import de.paladinsinn.tp.dcis.users.client.model.UserToImplImpl;
+import de.paladinsinn.tp.dcis.users.client.model.apikey.ApiKeyToImplImpl;
+import de.paladinsinn.tp.dcis.users.client.model.user.User;
+import de.paladinsinn.tp.dcis.users.client.model.user.UserImpl;
+import de.paladinsinn.tp.dcis.users.client.model.user.UserToImplImpl;
 import de.paladinsinn.tp.dcis.users.client.services.EnableUserClient;
 import de.paladinsinn.tp.dcis.users.client.services.UserLogEntryClient;
-import de.paladinsinn.tp.dcis.users.client.authentication.UserLoggedInStateRepository;
 import lombok.extern.slf4j.XSlf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +81,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @EnableUserClient
 @Import({
     UserToImplImpl.class,
-    UserToJpaImpl.class
+    UserToJpaImpl.class,
+    ApiKeyToImplImpl.class,
+    ApiKeyToJPAImpl.class,
 })
 @XSlf4j
 public class UserLogEntryIT {

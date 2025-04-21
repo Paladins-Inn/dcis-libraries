@@ -23,7 +23,7 @@ package de.paladinsinn.tp.dcis.users.client.authentication;
 import de.paladinsinn.tp.dcis.lib.messaging.events.LoggingEventBus;
 import de.paladinsinn.tp.dcis.users.client.BaseUserException;
 import de.paladinsinn.tp.dcis.users.client.events.activity.UserLoginEvent;
-import de.paladinsinn.tp.dcis.users.client.model.UserImpl;
+import de.paladinsinn.tp.dcis.users.client.model.user.UserImpl;
 import de.paladinsinn.tp.dcis.users.client.services.UserCantBeCreatedException;
 import de.paladinsinn.tp.dcis.users.client.services.UserClient;
 import jakarta.validation.constraints.NotNull;

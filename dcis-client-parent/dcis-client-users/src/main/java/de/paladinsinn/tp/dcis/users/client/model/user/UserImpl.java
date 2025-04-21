@@ -16,7 +16,7 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.paladinsinn.tp.dcis.users.client.model;
+package de.paladinsinn.tp.dcis.users.client.model.user;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

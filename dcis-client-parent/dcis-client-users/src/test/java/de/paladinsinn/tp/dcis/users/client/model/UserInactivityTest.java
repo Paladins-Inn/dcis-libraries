@@ -19,6 +19,8 @@
 package de.paladinsinn.tp.dcis.users.client.model;
 
 
+import de.paladinsinn.tp.dcis.users.client.model.user.User;
+import de.paladinsinn.tp.dcis.users.client.model.user.UserImpl;
 import lombok.extern.slf4j.XSlf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

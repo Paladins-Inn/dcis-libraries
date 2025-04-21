@@ -1,6 +1,8 @@
 package de.paladinsinn.tp.dcis.users.client.model;
 
 
+import de.paladinsinn.tp.dcis.users.client.model.user.User;
+import de.paladinsinn.tp.dcis.users.client.model.user.UserImpl;
 import de.paladinsinn.tp.dcis.users.client.services.UserStoreReader;
 import de.paladinsinn.tp.dcis.users.client.services.UserStoreWriter;
 import org.springframework.context.annotation.Scope;

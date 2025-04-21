@@ -16,13 +16,13 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.paladinsinn.tp.dcis.users.client.model;
+package de.paladinsinn.tp.dcis.users.client.model.user;
 
 import java.util.function.Function;
 
 import org.mapstruct.Mapper;
 
 @Mapper
-public interface UserToImpl extends Function<User, UserImpl> {
-    UserImpl apply(User orig);
+public interface UserLogEntryToImpl extends Function<UserLogEntry, UserLogEntryImpl> {
+        UserLogEntryImpl apply(UserLogEntry orig);
 }

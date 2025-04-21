@@ -16,29 +16,34 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.paladinsinn.tp.dcis.users.client.model;
+package de.paladinsinn.tp.dcis.users.client.model.user;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import de.kaiserpfalzedv.commons.api.resources.HasId;
-import de.kaiserpfalzedv.commons.api.resources.HasTimestamps;
+import lombok.*;
+import lombok.extern.jackson.Jacksonized;
 
-import java.io.Serializable;
+import java.io.Serial;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
-@JsonDeserialize(as = UserLogEntryImpl.class)
-public interface UserLogEntry extends HasId<UUID>, HasTimestamps, Serializable {
-    UUID getUser();
+@Jacksonized
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@Getter
+@ToString
+@EqualsAndHashCode(of = {"id"})
+public class UserLogEntryImpl implements UserLogEntry {
+    @Serial
+    private static final long serialVersionUID = 1L;
+    
+    private UUID id;
+    private OffsetDateTime created;
+    private OffsetDateTime modified;
+    private OffsetDateTime deleted;
+    
+    private UUID user;
 
-    String getSystem();
-    String getText();
-    
-    String getComment();
-    
-    default Object[] getI18nData() {
-        return new Object[] {
-            getCreated(),
-            getSystem(),
-            getUser()
-        };
-    }
+    private String system;
+    private String text;
+    private String comment;
 }

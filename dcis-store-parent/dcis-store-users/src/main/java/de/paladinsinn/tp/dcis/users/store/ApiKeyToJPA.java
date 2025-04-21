@@ -18,18 +18,16 @@
 
 package de.paladinsinn.tp.dcis.users.store;
 
-import de.paladinsinn.tp.dcis.users.client.model.user.User;
+import de.paladinsinn.tp.dcis.users.client.model.apikey.ApiKey;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.function.Function;
 
 @Mapper
-public interface UserToJpa extends Function<User, UserJPA> {
+public interface ApiKeyToJPA extends Function<ApiKey, ApiKeyJPA> {
     @Mapping(target = "version", ignore = true)
-    @Mapping(target = "revId", ignore = true)
-    @Mapping(target = "revisioned", ignore = true)
     @Mapping(target = "modified", ignore = true)
     @Mapping(target = "deleted", ignore = true)
-    UserJPA apply(User orig);
+    ApiKeyJPA apply(ApiKey orig);
 }

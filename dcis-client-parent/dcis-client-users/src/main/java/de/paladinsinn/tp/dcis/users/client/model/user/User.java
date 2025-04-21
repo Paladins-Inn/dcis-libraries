@@ -16,7 +16,7 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.paladinsinn.tp.dcis.users.client.model;
+package de.paladinsinn.tp.dcis.users.client.model.user;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.eventbus.EventBus;
@@ -24,10 +24,10 @@ import de.kaiserpfalzedv.commons.api.resources.HasId;
 import de.kaiserpfalzedv.commons.api.resources.HasName;
 import de.kaiserpfalzedv.commons.api.resources.HasNameSpace;
 import de.kaiserpfalzedv.commons.api.resources.HasTimestamps;
-import de.paladinsinn.tp.dcis.users.client.model.state.*;
 import de.paladinsinn.tp.dcis.users.client.authentication.UserIsBannedException;
 import de.paladinsinn.tp.dcis.users.client.authentication.UserIsDeletedException;
 import de.paladinsinn.tp.dcis.users.client.authentication.UserIsDetainedException;
+import de.paladinsinn.tp.dcis.users.client.model.user.state.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 

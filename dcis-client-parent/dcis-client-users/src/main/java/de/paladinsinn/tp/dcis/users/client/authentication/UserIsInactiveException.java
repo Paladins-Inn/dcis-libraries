@@ -2,7 +2,7 @@ package de.paladinsinn.tp.dcis.users.client.authentication;
 
 
 import de.paladinsinn.tp.dcis.users.client.BaseUserException;
-import de.paladinsinn.tp.dcis.users.client.model.User;
+import de.paladinsinn.tp.dcis.users.client.model.user.User;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

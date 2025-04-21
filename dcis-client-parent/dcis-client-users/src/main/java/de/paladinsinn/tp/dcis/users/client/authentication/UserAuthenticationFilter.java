@@ -21,7 +21,7 @@ package de.paladinsinn.tp.dcis.users.client.authentication;
 
 import com.google.common.eventbus.EventBus;
 import de.paladinsinn.tp.dcis.users.client.events.activity.UserLoginEvent;
-import de.paladinsinn.tp.dcis.users.client.model.User;
+import de.paladinsinn.tp.dcis.users.client.model.user.User;
 import de.paladinsinn.tp.dcis.users.client.services.UserCantBeCreatedException;
 import de.paladinsinn.tp.dcis.users.client.services.UserClient;
 import io.micrometer.core.annotation.Timed;

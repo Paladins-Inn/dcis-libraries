@@ -21,6 +21,8 @@ package de.paladinsinn.tp.dcis.users.client.events;
 
 import de.paladinsinn.tp.dcis.users.client.events.activity.UserLoginEvent;
 import de.paladinsinn.tp.dcis.users.client.events.activity.UserLogoutEvent;
+import de.paladinsinn.tp.dcis.users.client.events.apikey.ApiKeyCreatedEvent;
+import de.paladinsinn.tp.dcis.users.client.events.apikey.ApiKeyRevokedEvent;
 import de.paladinsinn.tp.dcis.users.client.events.arbitation.UserBannedEvent;
 import de.paladinsinn.tp.dcis.users.client.events.arbitation.UserDetainedEvent;
 import de.paladinsinn.tp.dcis.users.client.events.arbitation.UserPetitionedEvent;
@@ -49,4 +51,7 @@ public interface UserEventsHandler {
   
   void event(UserLoginEvent event);
   void event(UserLogoutEvent event);
+  
+  void event(ApiKeyCreatedEvent event);
+  void event(ApiKeyRevokedEvent event);
 }

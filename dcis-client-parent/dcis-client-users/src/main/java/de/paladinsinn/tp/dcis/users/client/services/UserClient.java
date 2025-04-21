@@ -2,8 +2,8 @@ package de.paladinsinn.tp.dcis.users.client.services;
 
 
 import de.paladinsinn.tp.dcis.lib.messaging.events.LoggingEventBus;
-import de.paladinsinn.tp.dcis.users.client.model.User;
-import de.paladinsinn.tp.dcis.users.client.model.UserImpl;
+import de.paladinsinn.tp.dcis.users.client.model.user.User;
+import de.paladinsinn.tp.dcis.users.client.model.user.UserImpl;
 import de.paladinsinn.tp.dcis.users.client.rest.UserRestClient;
 import de.paladinsinn.tp.dcis.users.client.authentication.UserIsBannedException;
 import de.paladinsinn.tp.dcis.users.client.authentication.UserIsDeletedException;
@@ -35,15 +35,9 @@ import static org.slf4j.ext.XLogger.Level.DEBUG;
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
 @XSlf4j
 public class UserClient {
-  // ignored because it will be implemented by either the dcis-store-users or the SCS itself.
-  @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   private final UserStoreReader reader;
-  // ignored because it will be implemented by either the dcis-store-users or the SCS itself.
-  @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   private final UserStoreWriter writer;
-  
   private final UserRestClient rest;
-
   private final LoggingEventBus bus;
   
   @Value("${spring.application.system:DCIS")

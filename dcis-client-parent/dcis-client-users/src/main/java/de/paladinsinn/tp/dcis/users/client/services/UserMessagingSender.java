@@ -23,6 +23,8 @@ import de.paladinsinn.tp.dcis.users.client.events.UserBaseEvent;
 import de.paladinsinn.tp.dcis.users.client.events.UserEventsHandler;
 import de.paladinsinn.tp.dcis.users.client.events.activity.UserLoginEvent;
 import de.paladinsinn.tp.dcis.users.client.events.activity.UserLogoutEvent;
+import de.paladinsinn.tp.dcis.users.client.events.apikey.ApiKeyCreatedEvent;
+import de.paladinsinn.tp.dcis.users.client.events.apikey.ApiKeyRevokedEvent;
 import de.paladinsinn.tp.dcis.users.client.events.arbitation.UserBannedEvent;
 import de.paladinsinn.tp.dcis.users.client.events.arbitation.UserDetainedEvent;
 import de.paladinsinn.tp.dcis.users.client.events.arbitation.UserPetitionedEvent;
@@ -141,6 +143,16 @@ public class UserMessagingSender implements UserEventsHandler {
   @Subscribe
   @Override
   public void event(final UserLogoutEvent event) {
+    sendEvent(event);
+  }
+  
+  @Override
+  public void event(final ApiKeyCreatedEvent event) {
+    sendEvent(event);
+  }
+  
+  @Override
+  public void event(final ApiKeyRevokedEvent event) {
     sendEvent(event);
   }
   

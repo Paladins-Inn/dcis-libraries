@@ -20,8 +20,8 @@
 package de.paladinsinn.tp.dcis.users.client.authentication;
 
 
-import de.paladinsinn.tp.dcis.users.client.model.User;
-import de.paladinsinn.tp.dcis.users.client.model.UserImpl;
+import de.paladinsinn.tp.dcis.users.client.model.user.User;
+import de.paladinsinn.tp.dcis.users.client.model.user.UserImpl;
 import lombok.extern.slf4j.XSlf4j;
 import org.junit.jupiter.api.Test;
 

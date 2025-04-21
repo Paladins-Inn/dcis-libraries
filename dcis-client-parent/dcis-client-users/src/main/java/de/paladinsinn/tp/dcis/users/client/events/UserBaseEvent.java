@@ -19,7 +19,7 @@ package de.paladinsinn.tp.dcis.users.client.events;
 
 
 import de.paladinsinn.tp.dcis.lib.messaging.events.DcisBaseEvent;
-import de.paladinsinn.tp.dcis.users.client.model.User;
+import de.paladinsinn.tp.dcis.users.client.model.user.User;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

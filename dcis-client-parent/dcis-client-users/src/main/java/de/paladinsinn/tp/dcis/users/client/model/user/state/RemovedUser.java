@@ -16,13 +16,13 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.paladinsinn.tp.dcis.users.client.model.state;
+package de.paladinsinn.tp.dcis.users.client.model.user.state;
 
 
 import com.google.common.eventbus.EventBus;
 import de.paladinsinn.tp.dcis.users.client.events.arbitation.UserPetitionedEvent;
 import de.paladinsinn.tp.dcis.users.client.events.state.UserActivatedEvent;
-import de.paladinsinn.tp.dcis.users.client.model.User;
+import de.paladinsinn.tp.dcis.users.client.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

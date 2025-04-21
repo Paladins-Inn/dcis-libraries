@@ -19,7 +19,7 @@
 package de.paladinsinn.tp.dcis.users.store;
 
 import de.kaiserpfalzedv.commons.jpa.AbstractRevisionedJPAEntity;
-import de.paladinsinn.tp.dcis.users.client.model.User;
+import de.paladinsinn.tp.dcis.users.client.model.user.User;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,6 +45,7 @@ import java.util.UUID;
     name = "USERS",
     uniqueConstraints = {
         @UniqueConstraint(columnNames = {"ID"}),
+        @UniqueConstraint(columnNames = {"ISSUER", "SUBJECT"}),
         @UniqueConstraint(columnNames = {"NAMESPACE", "NAME"})
     }
 )

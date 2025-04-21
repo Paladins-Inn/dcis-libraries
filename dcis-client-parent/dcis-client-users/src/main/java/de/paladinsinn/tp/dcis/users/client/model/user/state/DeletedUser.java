@@ -16,15 +16,14 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.paladinsinn.tp.dcis.users.client.model.state;
+package de.paladinsinn.tp.dcis.users.client.model.user.state;
 
 
 import com.google.common.eventbus.EventBus;
 import de.paladinsinn.tp.dcis.users.client.events.arbitation.UserPetitionedEvent;
-import de.paladinsinn.tp.dcis.users.client.events.arbitation.UserReleasedEvent;
-import de.paladinsinn.tp.dcis.users.client.events.state.UserDeletedEvent;
+import de.paladinsinn.tp.dcis.users.client.events.state.UserActivatedEvent;
 import de.paladinsinn.tp.dcis.users.client.events.state.UserRemovedEvent;
-import de.paladinsinn.tp.dcis.users.client.model.User;
+import de.paladinsinn.tp.dcis.users.client.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,14 +41,16 @@ import java.util.UUID;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @ToString(of = {"user"})
-public class BannedUser implements UserState {
+public class DeletedUser implements UserState {
   @Getter
   final private User user;
   final private EventBus bus;
   
   @Override
   public UserState activate() {
-    return this;
+    bus.post(UserActivatedEvent.builder().user(user).build());
+    
+    return ActiveUser.builder().user(user).bus(bus).build();
   }
   
   @Override
@@ -62,34 +63,24 @@ public class BannedUser implements UserState {
     user.unban();
     user.release();
     
-    if (user.isDeleted()) {
-      return DeletedUser.builder().user(user).bus(bus).build();
-    }
-    
-    bus.post(UserReleasedEvent.builder().user(user).build());
-    
-    return ActiveUser.builder().user(user).bus(bus).build();
+    return this;
   }
   
   @Override
   public UserState ban() {
+    user.ban();
+    
     return this;
   }
   
   @Override
   public UserState delete() {
-    user.delete();
-    
-    bus.post(UserDeletedEvent.builder().user(user).build());
-    
-    return DeletedUser.builder().user(user).bus(bus).build();
+    return this;
   }
   
   
   @Override
   public UserState remove(final boolean delete) {
-    user.delete();
-    
     bus.post(UserRemovedEvent.builder().user(user).delete(delete).build());
     
     return RemovedUser.builder().user(user).bus(bus).build();
@@ -98,7 +89,7 @@ public class BannedUser implements UserState {
   @Override
   public UserState petition(final UUID petition) {
     bus.post(UserPetitionedEvent.builder().user(user).petition(petition).build());
-
+    
     return this;
   }
 }

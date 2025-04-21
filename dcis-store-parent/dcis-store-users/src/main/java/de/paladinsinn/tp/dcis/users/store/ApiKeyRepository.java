@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. Kaiserpfalz EDV-Service, Roland T. Lichti
+ * Copyright (c) 2024-2025. Kaiserpfalz EDV-Service, Roland T. Lichti
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -15,14 +15,19 @@
  * License along with this program.
  * If not, see <https://www.gnu.org/licenses/>.
  */
+package de.paladinsinn.tp.dcis.users.store;
 
-package de.paladinsinn.tp.dcis.users.client.model;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.function.Function;
+import java.util.UUID;
 
-import org.mapstruct.Mapper;
-
-@Mapper
-public interface UserLogEntryToImpl extends Function<UserLogEntry, UserLogEntryImpl> {
-        UserLogEntryImpl apply(UserLogEntry orig);
+/**
+ * 
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @version 1.0.0
+ * @since 2024-08-18
+ */
+@Repository
+public interface ApiKeyRepository extends JpaRepository<ApiKeyJPA, UUID> {
 }

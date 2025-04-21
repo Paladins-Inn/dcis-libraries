@@ -20,10 +20,10 @@ package de.paladinsinn.tp.dcis.users.client.services;
 
 
 import com.google.common.eventbus.EventBus;
-import de.paladinsinn.tp.dcis.users.client.model.UserToImplImpl;
+import de.paladinsinn.tp.dcis.users.client.model.user.UserToImplImpl;
 import de.paladinsinn.tp.dcis.users.client.events.activity.UserLoginEvent;
 import de.paladinsinn.tp.dcis.users.client.events.activity.UserLogoutEvent;
-import de.paladinsinn.tp.dcis.users.client.model.UserImpl;
+import de.paladinsinn.tp.dcis.users.client.model.user.UserImpl;
 import lombok.extern.slf4j.XSlf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

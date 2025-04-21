@@ -16,10 +16,10 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.paladinsinn.tp.dcis.users.client.model.state;
+package de.paladinsinn.tp.dcis.users.client.model.user.state;
 
 
-import de.paladinsinn.tp.dcis.users.client.model.User;
+import de.paladinsinn.tp.dcis.users.client.model.user.User;
 
 import java.util.UUID;
 
