@@ -52,7 +52,7 @@ public class UserExceptionsTests {
   public void shouldGiveBannedDateWhenUserIsBanned() {
     log.entry();
     
-    User user = USER.toBuilder().banned(true).deleted(OffsetDateTime.now()).build();
+    User user = USER.toBuilder().banned(true).deleted(OffsetDateTime.now().minusSeconds(2L)).build();
     
     UserIsBannedException sut = new UserIsBannedException(user);
     

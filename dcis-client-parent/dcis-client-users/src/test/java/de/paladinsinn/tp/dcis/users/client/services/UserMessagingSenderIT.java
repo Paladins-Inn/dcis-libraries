@@ -41,6 +41,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.stream.binder.test.EnableTestBinder;
 import org.springframework.cloud.stream.binder.test.OutputDestination;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.test.context.ActiveProfiles;
@@ -62,6 +63,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @ActiveProfiles({"test"})
 @EnableTestBinder
+@Import({
+    UserMessagingSender.class,
+})
 @EnableEventBus
 @XSlf4j
 public class UserMessagingSenderIT {

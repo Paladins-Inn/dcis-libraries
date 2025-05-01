@@ -22,17 +22,14 @@ package de.paladinsinn.tp.dcis.users.client.services;
 import com.google.common.eventbus.EventBus;
 import de.paladinsinn.tp.dcis.lib.messaging.events.EnableEventBus;
 import de.paladinsinn.tp.dcis.lib.ui.formatter.EnableKaiserpfalzCommonsSpringFormatters;
-import de.paladinsinn.tp.dcis.users.client.model.user.UserToImplImpl;
+import de.paladinsinn.tp.dcis.users.client.authentication.UserLoggedInStateRepository;
 import de.paladinsinn.tp.dcis.users.client.model.user.User;
 import de.paladinsinn.tp.dcis.users.client.model.user.UserImpl;
-import de.paladinsinn.tp.dcis.users.client.authentication.UserLoggedInStateRepository;
+import de.paladinsinn.tp.dcis.users.client.model.user.UserToImplImpl;
 import lombok.extern.slf4j.XSlf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.metrics.MetricsAspectsAutoConfiguration;
-import org.springframework.boot.actuate.autoconfigure.metrics.MetricsAutoConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.stream.binder.test.EnableTestBinder;
@@ -57,10 +54,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @since 2025-03-23
  */
 @SpringBootTest
-@EnableAutoConfiguration(exclude = {
-    MetricsAspectsAutoConfiguration.class,
-    MetricsAutoConfiguration.class,
-})
 @Import({
     UserToImplImpl.class
 })

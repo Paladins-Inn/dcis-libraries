@@ -41,7 +41,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
 @XSlf4j
 public class UserLogEntryClient {
-    private final UserLogEntrySender sender;
+    private final UserMessagingSender sender;
     private final UserLoggedInStateRepository userState;
     private final LoggingEventBus bus;
     
@@ -73,7 +73,7 @@ public class UserLogEntryClient {
         if (userState.isLoggedIn(event.getUser())) {
             log.debug("User is already logged in. user={}", event.getUser());
         } else {
-            sender.send(event);
+            sender.event(event);
         }
         userState.login(event.getUser());
         
@@ -85,7 +85,7 @@ public class UserLogEntryClient {
     public void on(final UserLogoutEvent event) {
         log.entry(event);
         
-        sender.send(event);
+        sender.event(event);
         userState.logout(event.getUser());
         
         log.exit();

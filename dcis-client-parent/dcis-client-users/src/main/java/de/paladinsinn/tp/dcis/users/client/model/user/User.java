@@ -27,10 +27,14 @@ import de.kaiserpfalzedv.commons.api.resources.HasTimestamps;
 import de.paladinsinn.tp.dcis.users.client.authentication.UserIsBannedException;
 import de.paladinsinn.tp.dcis.users.client.authentication.UserIsDeletedException;
 import de.paladinsinn.tp.dcis.users.client.authentication.UserIsDetainedException;
+import de.paladinsinn.tp.dcis.users.client.authorization.HasOwner;
 import de.paladinsinn.tp.dcis.users.client.model.user.state.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 
+import java.io.Serializable;
+import java.security.Principal;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -39,7 +43,7 @@ import java.util.UUID;
  * The user of the DCIS system.
  */
 @JsonDeserialize(as = UserImpl.class)
-public interface User extends HasId<UUID>, HasNameSpace, HasName, HasTimestamps {
+public interface User extends Principal, HasId<UUID>, HasNameSpace, HasName, HasTimestamps, HasOwner<UUID>, Serializable {
   /**
    * @return The IDP issuer of this user.
    */
@@ -128,6 +132,19 @@ public interface User extends HasId<UUID>, HasNameSpace, HasName, HasTimestamps 
    */
   default boolean isInactive() {
     return (isDeleted() || isBanned() || isDetained());
+  }
+  
+  default UUID getOwnerId() {
+    return getId();
+  }
+  
+  @SuppressWarnings("unchecked")
+  default HasId<UUID> getOwner() {
+    return this;
+  }
+  
+  default boolean hasRole(@NotBlank final String role) {
+    return false;
   }
   
   /**

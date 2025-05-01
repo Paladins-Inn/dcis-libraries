@@ -95,6 +95,18 @@ public class UserJPA extends AbstractRevisionedJPAEntity<UUID> implements User {
     @ToString.Include
     private String name;
     
+    @Column(name = "GM", columnDefinition = "BOOLEAN", nullable = false)
+    private boolean gm;
+    
+    @Column(name = "ORGA", columnDefinition = "BOOLEAN", nullable = false)
+    private boolean orga;
+    
+    @Column(name = "JUDGE", columnDefinition = "BOOLEAN", nullable = false)
+    private boolean judge;
+    
+    @Column(name = "ADMIN", columnDefinition = "BOOLEAN", nullable = false)
+    private boolean admin;
+    
     @Override
     public UserJPA detain(@Min(1) @Max(1095) long days) {
         log.entry(days);
@@ -153,5 +165,18 @@ public class UserJPA extends AbstractRevisionedJPAEntity<UUID> implements User {
         this.deleted = null;
         
         return log.exit(this);
+    }
+    
+    @Override
+    public boolean hasRole(@NotBlank final String role) {
+      return switch (role) {
+        case "PLAYER" -> true;
+        case "GM" -> gm;
+        case "ORGA" -> orga;
+        case "JUDGE" -> judge;
+        case "ADMIN" -> admin;
+        
+        default -> false;
+      };
     }
 }

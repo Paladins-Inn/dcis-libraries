@@ -23,8 +23,10 @@ import jakarta.validation.constraints.Min;
 import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 import lombok.extern.slf4j.XSlf4j;
+import net.minidev.json.annotate.JsonIgnore;
 
 import java.time.*;
+import java.util.Locale;
 import java.util.UUID;
 
 @Jacksonized
@@ -36,7 +38,9 @@ import java.util.UUID;
 @EqualsAndHashCode(of = {"id"})
 @XSlf4j
 public class UserImpl implements User {
-    private UUID id;
+    @Builder.Default
+    private UUID id = UUID.randomUUID();
+    
     @Builder.Default
     private OffsetDateTime created = OffsetDateTime.now(Clock.systemUTC());
     private OffsetDateTime modified;
@@ -53,6 +57,16 @@ public class UserImpl implements User {
     
     private String issuer;
     private String subject;
+    
+    @JsonIgnore
+    private boolean gm;
+    @JsonIgnore
+    private boolean orga;
+    @JsonIgnore
+    private boolean judge;
+    @JsonIgnore
+    private boolean admin;
+
     
     @Override
     public UserImpl detain(@Min(1) @Max(1095) long days) {
@@ -112,5 +126,23 @@ public class UserImpl implements User {
         this.deleted = null;
         
         return log.exit(this);
+    }
+    
+    @Override
+    public boolean hasRole(final String role) {
+      return switch (role.toLowerCase(Locale.ROOT)) {
+        case "player" -> true;
+        case "gm" -> this.gm;
+        case "orga" -> this.orga;
+        case "judge" -> this.judge;
+        case "admin" -> this.admin;
+        default -> false;
+      };
+    }
+    
+    
+    @Override
+    public String getABACObjectName() {
+        return "User";
     }
 }

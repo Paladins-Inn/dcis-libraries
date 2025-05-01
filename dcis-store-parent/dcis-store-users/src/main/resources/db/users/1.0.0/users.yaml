@@ -98,6 +98,34 @@ databaseChangeLog:
             constraints:
               nullable: false
               notNullConstraintName: USERS_BANNED_NN
+        - column:
+            name: GM
+            type: boolean
+            defaultValueBoolean: false
+            constraints:
+              nullable: false
+              notNullConstraintName: USERS_GM_NN
+        - column:
+            name: ORGA
+            type: boolean
+            defaultValueBoolean: false
+            constraints:
+              nullable: false
+              notNullConstraintName: USERS_ORGA_NN
+        - column:
+            name: JUDGE
+            type: boolean
+            defaultValueBoolean: false
+            constraints:
+              nullable: false
+              notNullConstraintName: USERS_JUDGE_NN
+        - column:
+            name: ADMIN
+            type: boolean
+            defaultValueBoolean: false
+            constraints:
+              nullable: false
+              notNullConstraintName: USERS_ADMIN_NN
     - addUniqueConstraint:
         constraintName: USERS_NAME_UK
         tableName: USERS

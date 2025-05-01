@@ -3,7 +3,7 @@ spring:
   application:
     # noinspection SpringBootApplicationYaml
     system: DCIS
-    name: dcis-commons
+    name: dcis-users
     admin:
       enabled: false
   main:
@@ -14,15 +14,15 @@ spring:
       # noinspection SpringBootApplicationYaml
       bindings:
         input:
-          user-events:
-            destination: dcis.user.log
+          users-changes:
+            destination: dcis.users.changes
             content-type: application/json
             consumer:
               use-native-decoding: false
               auto-startup: true
         output:
-          user-events:
-            destination: dcis.user.log
+          users-modification:
+            destination: dcis.users.modification
             content-type: application/json
             producer:
               use-native-encoding: false
@@ -87,3 +87,14 @@ logging:
         web:
           filter:
             CommonsRequestLoggingFilter: INFO
+            
+casbin:
+  enable-casbin: true
+  model: classpath:casbin/model.conf
+  policy: classpath:casbin/model.csv
+
+dcis:
+  users:
+    rest:
+      url: https://dics.storm-knights.org/users/
+      api-key: dfbc2a2b-6f0d-45dd-94fa-4b72c896867b
