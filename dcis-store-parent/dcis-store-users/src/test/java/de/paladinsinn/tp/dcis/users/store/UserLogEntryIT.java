@@ -28,7 +28,6 @@ import de.paladinsinn.tp.dcis.users.client.events.activity.UserLogoutEvent;
 import de.paladinsinn.tp.dcis.users.client.model.apikey.ApiKeyToImplImpl;
 import de.paladinsinn.tp.dcis.users.client.model.user.User;
 import de.paladinsinn.tp.dcis.users.client.model.user.UserImpl;
-import de.paladinsinn.tp.dcis.users.client.model.user.UserToImplImpl;
 import de.paladinsinn.tp.dcis.users.client.services.EnableUserClient;
 import de.paladinsinn.tp.dcis.users.client.services.UserLogEntryClient;
 import lombok.extern.slf4j.XSlf4j;

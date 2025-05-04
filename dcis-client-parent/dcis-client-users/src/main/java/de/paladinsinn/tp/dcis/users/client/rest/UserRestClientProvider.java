@@ -21,10 +21,37 @@ import reactor.core.publisher.Mono;
 @XSlf4j
 public class UserRestClientProvider {
   @Bean
-  public UserRestClient userRestClient(@NotNull @Valid final UserRestClientConfiguration properties) {
+  public UserRestClient userRestClient(@NotNull @Valid final HttpServiceProxyFactory factory) {
+    log.entry(factory);
+    
+    UserRestClient result = factory.createClient(UserRestClient.class);
+    
+    return log.exit(result);
+  }
+  
+  @Bean
+  public HttpServiceProxyFactory httpServiceProxyFactory(@NotNull @Valid final WebClientAdapter adapter) {
+    log.entry(adapter);
+    
+    HttpServiceProxyFactory result = HttpServiceProxyFactory.builderFor(adapter).build();
+    
+    return log.exit(result);
+  }
+  
+  @Bean
+  public WebClientAdapter webClientAdapter(@NotNull @Valid final WebClient webClient) {
+    log.entry(webClient);
+    
+    WebClientAdapter result = WebClientAdapter.create(webClient);
+    
+    return log.exit(result);
+  }
+
+  @Bean
+  public WebClient webClient(@NotNull @Valid final UserRestClientConfiguration properties) {
     log.entry(properties);
     
-    WebClient webClient = WebClient.builder()
+    WebClient result = WebClient.builder()
         .baseUrl(properties.getUrl())
         .defaultStatusHandler(
             httpStatusCode -> HttpStatus.NOT_FOUND == httpStatusCode,
@@ -33,9 +60,7 @@ public class UserRestClientProvider {
             HttpStatusCode::is5xxServerError,
             response -> Mono.error(new IllegalStateException()))
         .build();
-    WebClientAdapter adapter = WebClientAdapter.create(webClient);
-    HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter).build();
     
-    return log.exit(factory.createClient(UserRestClient.class));
+    return log.exit(result);
   }
 }

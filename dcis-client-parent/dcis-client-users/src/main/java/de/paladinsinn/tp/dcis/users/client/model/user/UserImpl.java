@@ -58,13 +58,9 @@ public class UserImpl implements User {
     private String issuer;
     private String subject;
     
-    @JsonIgnore
     private boolean gm;
-    @JsonIgnore
     private boolean orga;
-    @JsonIgnore
     private boolean judge;
-    @JsonIgnore
     private boolean admin;
 
     
