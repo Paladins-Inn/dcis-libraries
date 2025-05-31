@@ -34,7 +34,6 @@
   <name>de.paladins-inn.torganized-play:dcis-client-parent</name>
 
   <modules>
-    <module>dcis-client-users</module>
   </modules>
 
 

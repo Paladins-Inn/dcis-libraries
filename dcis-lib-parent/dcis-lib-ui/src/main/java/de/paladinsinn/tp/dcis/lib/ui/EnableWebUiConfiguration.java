@@ -40,6 +40,6 @@ import java.lang.annotation.*;
         RestTemplateProvider.class,
         WebI18nConfiguration.class,
         FilterRegistrations.class,
-        WebUiModelDefaultValueSetter.class
+        WebUiModelDefaultValueSetter.class,
  })
 public @interface EnableWebUiConfiguration {}

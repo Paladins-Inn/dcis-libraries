@@ -34,14 +34,13 @@
   <name>de.paladins-inn.torganized-play:dcis-lib-parent</name>
 
   <modules>
-    <module>dcis-lib-messaging</module>
     <module>dcis-lib-rest</module>
     <module>dcis-lib-ui</module>
   </modules>
 
 
   <properties>
-    <kp-commons.version>4.0.13</kp-commons.version>
+    <kp-commons.version>4.1.0</kp-commons.version>
   </properties>
 
   <inceptionYear>2025</inceptionYear>

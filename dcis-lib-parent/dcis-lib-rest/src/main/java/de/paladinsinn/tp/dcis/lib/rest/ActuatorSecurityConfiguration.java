@@ -17,29 +17,22 @@
  */
 package de.paladinsinn.tp.dcis.lib.rest;
 
+import de.kaiserpfalzedv.commons.users.client.service.KpUserDetailsService;
+import de.kaiserpfalzedv.commons.users.client.service.UserAuthenticationManager;
+import de.kaiserpfalzedv.commons.users.client.service.UserAuthenticationService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.XSlf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 
 
 @Configuration
@@ -49,13 +42,18 @@ import lombok.RequiredArgsConstructor;
 @Order(1)
 @RequiredArgsConstructor
 @XSlf4j
+@Import({
+		UserAuthenticationService.class,
+		UserAuthenticationManager.class,
+		KpUserDetailsService.class,
+})
 public class ActuatorSecurityConfiguration {
     @Bean
     public SecurityFilterChain observabilitySecurity(HttpSecurity http) throws Exception {
 				log.entry(http);
-
-        AntPathRequestMatcher matcher = new AntPathRequestMatcher("/actuator/**");
-        AntPathRequestMatcher healthCheck = new AntPathRequestMatcher("/actuator/health/**");
+			
+				PathPatternRequestMatcher matcher = PathPatternRequestMatcher.withDefaults().matcher("/actuator/**");
+				PathPatternRequestMatcher healthCheck = PathPatternRequestMatcher.withDefaults().matcher("/actuator/health/**");
 
         http
             .securityMatcher(matcher)
@@ -73,47 +71,4 @@ public class ActuatorSecurityConfiguration {
 
         return log.exit(http.build());
     }
-
-    @Bean
-	public AuthenticationManager authenticationManager(
-			UserDetailsService userDetailsService,
-			PasswordEncoder passwordEncoder) {
-			log.entry(userDetailsService, passwordEncoder);
-
-		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(userDetailsService);
-		authenticationProvider.setPasswordEncoder(passwordEncoder);
-
-		ProviderManager providerManager = new ProviderManager(authenticationProvider);
-		providerManager.setEraseCredentialsAfterAuthentication(false);
-
-		return log.exit(providerManager);
-	}
-
-	@Value("${spring.security.user.name}")
-	private String username;
-	@Value("${spring.security.user.password}")
-	private String password;
-	@Value("${spring.security.user.roles}")
-	private String roles;
-
-	@Bean
-	public UserDetailsService userDetailsService() {
-		log.entry(username, roles);
-
-		@SuppressWarnings("deprecation")
-        UserDetails userDetails = User
-            .withDefaultPasswordEncoder()
-            .username(username)
-			.password(password)
-			.roles(roles.split(","))
-			.build();
-
-		return log.exit(new InMemoryUserDetailsManager(userDetails));
-	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return log.exit(PasswordEncoderFactories.createDelegatingPasswordEncoder());
-	}
 }

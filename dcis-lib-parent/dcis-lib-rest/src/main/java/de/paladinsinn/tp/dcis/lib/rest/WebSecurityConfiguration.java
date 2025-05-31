@@ -18,10 +18,16 @@
 
 package de.paladinsinn.tp.dcis.lib.rest;
 
+import de.kaiserpfalzedv.commons.spring.security.EnableKeycloakSecurityIntegration;
+import de.kaiserpfalzedv.commons.spring.security.KeycloakGroupAuthorityMapper;
+import de.kaiserpfalzedv.commons.spring.security.KeycloakLogoutHandler;
+import de.kaiserpfalzedv.commons.users.client.reactive.ReactUserSecurityConfig;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.XSlf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -31,13 +37,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
-import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
-import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
-
-import de.kaiserpfalzedv.commons.spring.security.EnableKeycloakSecurityIntegration;
-import de.kaiserpfalzedv.commons.spring.security.KeycloakGroupAuthorityMapper;
-import de.kaiserpfalzedv.commons.spring.security.KeycloakLogoutHandler;
-import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 
 
 @Configuration
@@ -45,6 +45,9 @@ import lombok.RequiredArgsConstructor;
 @EnableMethodSecurity(jsr250Enabled = true, securedEnabled = true)
 @EnableKeycloakSecurityIntegration
 @Order(2)
+@Import({
+    ReactUserSecurityConfig.class,
+})
 @RequiredArgsConstructor
 @XSlf4j
 public class WebSecurityConfiguration {
@@ -57,24 +60,27 @@ public class WebSecurityConfiguration {
     @Bean
 	  public SecurityFilterChain userSecurityFilterChain(
         HttpSecurity http, 
-        HandlerMappingIntrospector introspector,
         KeycloakGroupAuthorityMapper authoritiesMapper,
         KeycloakLogoutHandler keycloakLogoutHandler
     ) throws Exception {
-        log.entry(http, introspector, authoritiesMapper, keycloakLogoutHandler, servletPath);
+        log.entry(http, authoritiesMapper, keycloakLogoutHandler, servletPath);
 
         CsrfTokenRequestAttributeHandler csrfRequestHandler = new CsrfTokenRequestAttributeHandler();
         // set the name of the attribute the CsrfToken will be populated on
         csrfRequestHandler.setCsrfRequestAttributeName(null);
-
-        MvcRequestMatcher.Builder requestMapper = new MvcRequestMatcher.Builder(introspector).servletPath(servletPath);
+        
+        PathPatternRequestMatcher publicMatcher = PathPatternRequestMatcher.withDefaults().matcher(servletPath + "/public/**");
+        PathPatternRequestMatcher loginMatcher = PathPatternRequestMatcher.withDefaults().matcher(servletPath + "/login");
+        PathPatternRequestMatcher oauth2Matcher = PathPatternRequestMatcher.withDefaults().matcher(servletPath + "/oauth2/**");
+        PathPatternRequestMatcher webjarsMatcher = PathPatternRequestMatcher.withDefaults().matcher(servletPath + "/webjars/**");
+        
 
 		    http
             .authorizeHttpRequests(a -> a
-                .requestMatchers(requestMapper.pattern("/public")).anonymous()
-                .requestMatchers(requestMapper.pattern("/login")).anonymous()
-                .requestMatchers(requestMapper.pattern("/oauth2/**")).anonymous()
-                .requestMatchers(requestMapper.pattern("/webjars/**")).anonymous()
+                .requestMatchers(publicMatcher).anonymous()
+                .requestMatchers(loginMatcher).anonymous()
+                .requestMatchers(oauth2Matcher).anonymous()
+                .requestMatchers(webjarsMatcher).anonymous()
                 .anyRequest().authenticated()
             )
             .oauth2Login(l -> l

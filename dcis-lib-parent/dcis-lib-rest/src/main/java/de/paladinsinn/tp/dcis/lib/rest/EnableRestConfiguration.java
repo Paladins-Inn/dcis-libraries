@@ -32,11 +32,10 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-@Import({ 
+@Import({
         ActuatorSecurityConfiguration.class,
-        WebSecurityConfiguration.class,
         RequestLoggingConfiguration.class,
         RestTemplateProvider.class,
-        FilterRegistrations.class
+        FilterRegistrations.class,
  })
 public @interface EnableRestConfiguration {}

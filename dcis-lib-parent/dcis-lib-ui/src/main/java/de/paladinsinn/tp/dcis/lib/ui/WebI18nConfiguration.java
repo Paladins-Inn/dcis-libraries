@@ -17,6 +17,8 @@
  */
 package de.paladinsinn.tp.dcis.lib.ui;
 
+import de.kaiserpfalzedv.commons.spring.i18n.KaiserpfalzMessageSource;
+import de.paladinsinn.tp.dcis.lib.ui.formatter.EnableKaiserpfalzCommonsSpringFormatters;
 import lombok.extern.slf4j.XSlf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -27,10 +29,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
-import de.kaiserpfalzedv.commons.spring.i18n.KaiserpfalzMessageSource;
-
 @Configuration
 @XSlf4j
+@EnableWebUiConfiguration
+@EnableKaiserpfalzCommonsSpringFormatters
 public class WebI18nConfiguration implements WebMvcConfigurer {
 
     @Bean
@@ -45,8 +47,11 @@ public class WebI18nConfiguration implements WebMvcConfigurer {
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
+        log.entry();
+        
         LocaleChangeInterceptor result = new LocaleChangeInterceptor();
         result.setParamName("lang");
+        
         return log.exit(result);
     }
 
@@ -54,8 +59,8 @@ public class WebI18nConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         log.entry(registry);
-
-        registry.addInterceptor(localeChangeInterceptor());
+        
+        log.exit(registry.addInterceptor(localeChangeInterceptor()));
     }
     
 }

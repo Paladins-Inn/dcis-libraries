@@ -34,7 +34,6 @@
   <name>de.paladins-inn.torganized-play:dcis-store-parent</name>
 
   <modules>
-    <module>dcis-store-users</module>
   </modules>
 
   <inceptionYear>2025</inceptionYear>
